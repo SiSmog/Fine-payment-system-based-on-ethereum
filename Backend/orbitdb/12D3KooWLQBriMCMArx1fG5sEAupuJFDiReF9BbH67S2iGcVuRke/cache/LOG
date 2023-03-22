@@ -1,0 +1,5 @@
+2023/03/08-15:16:02.960 1ddc Recovering log #126
+2023/03/08-15:16:02.960 1ddc Level-0 table #128: started
+2023/03/08-15:16:02.995 1ddc Level-0 table #128: 268 bytes OK
+2023/03/08-15:16:03.033 1ddc Delete type=0 #126
+2023/03/08-15:16:03.033 1ddc Delete type=3 #124
