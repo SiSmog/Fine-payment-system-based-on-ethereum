@@ -16,7 +16,6 @@ import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
 
-import {useSelector,useDispatch} from "react-redux"
 function getStepContent(step) {
   switch (step) {
     case 0:
@@ -35,10 +34,8 @@ const steps = ['Shipping address', 'Payment details', 'Review your order'];
 const theme = createTheme();
 
 export default function Checkout() {
-    console.log(useSelector((state)=>state.registration))
   const [activeStep, setActiveStep] = React.useState(0);
-
-
+  
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   };

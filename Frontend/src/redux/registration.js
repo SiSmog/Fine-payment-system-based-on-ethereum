@@ -3,12 +3,13 @@ import {createSlice} from "@reduxjs/toolkit"
 const registrationSlice= createSlice({
     name:"registration",
     initialState:{
-        firstName:"test",
+        firstName:"",
         lastName:"",
         id:"",
         driverLicense:"",
         email:"",
         phoneNumber:"",
+        licensePlateType:"",
         licensePlate:"",
         speedLimit:"",
         speed:""
@@ -20,11 +21,12 @@ const registrationSlice= createSlice({
         setDriverLicense: (state,value)=>{state.driverLicense=value.payload},
         setEmail: (state,value)=>{state.email=value.payload},
         setPhoneNumber: (state,value)=>{state.phoneNumber=value.payload},
+        setLicensePlateType: (state,value)=>{state.licensePlateType=value.payload},
         setLicensePlate: (state,value)=>{state.licensePlate=value.payload},
         setSpeedLimit: (state,value)=>{state.speedLimit=value.payload},
         setSpeed: (state,value)=>{state.speed=value.payload},
     }
 })
-export const {setFirstName,setLastName,setId,setDriverLicense,setEmail,setPhoneNumber,setLicensePlate,setSpeedLimit,setSpeed}=registrationSlice.actions
+export const {setFirstName,setLastName,setId,setDriverLicense,setEmail,setPhoneNumber,setLicensePlateType,setLicensePlate,setSpeedLimit,setSpeed}=registrationSlice.actions
 
 export default registrationSlice.reducer

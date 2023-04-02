@@ -5,49 +5,59 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
+//rigel el matricule
+import {useSelector,useDispatch} from "react-redux" 
+import {setFirstName,setLastName,setId,setDriverLicense,setEmail,setPhoneNumber} from "../redux/registration"
 export default function AddressForm() {
-  const [CIN, setCIN] = React.useState("");
-  const handleCIN = (e) => {
+
+  const dispatch=useDispatch()
+
+
+  const firstName=useSelector((state)=>state.registration.firstName)
+  const handleFirstName=(e)=>{
+    dispatch(setFirstName(e.target.value))
+  }
+  const id=useSelector((state)=>state.registration.id)
+  const handleId = (e) => {
     const regEX = new RegExp("^[0-9]{0,8}$");
-    console.log(e.target.value);
     if (regEX.test(e.target.value)) {
-      setCIN(e.target.value);
+      dispatch(setId(e.target.value))
     }
   };
-  const [license, setLicense] = React.useState("");
-  const handleLicense = (e) => {
+
+  const lastName=useSelector((state)=>state.registration.lastName)
+  const handleLastName=(e)=>{
+    dispatch(setLastName(e.target.value))
+  }
+
+  const driverLicense=useSelector((state)=>state.registration.driverLicense)
+
+  const handleDriverLicense = (e) => {
     const regEX = new RegExp("^[0-9]{0,2}/*[0-9]{0,6}$");
     if (regEX.test(e.target.value)) {
-      if (license.length == 1 && e.target.value.length == 2) {
-        setLicense(e.target.value + "/");
+      if (driverLicense.length == 1 && e.target.value.length == 2) {
+        dispatch(setDriverLicense(e.target.value+"/"))
       }
-      else{setLicense(e.target.value)}
+      else{dispatch(setDriverLicense(e.target.value))}
     }
   };
-  const [email, setEmail] = React.useState("");
+
+  const email=useSelector((state)=>state.registration.email)
   const handleEmail = (e) => {
-    const regEX = {};
-    console.log(e.target.value);   
-    if (regEX.test(e.target.value)) {
-      setEmail(e.target.value);
-    }
+      dispatch(setEmail(e.target.value))
   };
-  const [phone, setPhone] = React.useState("");
-  const handlePhone = (e) => {
+//    const regEX = new RegExp("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$");
+  const phoneNumber=useSelector((state)=>state.registration.phoneNumber)
+
+  const handlePhoneNumber = (e) => {
     const regEX = new RegExp("^[0-9]{0,8}$")
-    console.log(e.target.value);
     if (regEX.test(e.target.value)) {
-      setPhone(e.target.value);
+      dispatch(setPhoneNumber(e.target.value));
     }
   };
-  const [firstName, setFirstName] = React.useState("");
-  const handleFirstName = (e) => {
-    setFirstName(e.target.value);
-  };
-  const [lastName, setLastName] = React.useState("");
-  const handleLastName = (e) => {
-      setLastName(e.target.value);  
-  };
+
+
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -87,8 +97,8 @@ export default function AddressForm() {
             name="CIN"
             label="CIN"
             fullWidth
-            value={CIN}
-            onChange={handleCIN}
+            value={id}
+            onChange={handleId}
             variant="standard"
           />
         </Grid>
@@ -98,8 +108,8 @@ export default function AddressForm() {
             name="state"
             label="Driver license"
             fullWidth
-            value={license}
-            onChange={handleLicense}
+            value={driverLicense}
+            onChange={handleDriverLicense}
             variant="standard"
           />
         </Grid>
@@ -112,7 +122,6 @@ export default function AddressForm() {
             value={email}
             onChange={handleEmail}
             fullWidth
-            autoComplete="shipping postal-code"
             variant="standard"
           />
         </Grid>
@@ -122,8 +131,8 @@ export default function AddressForm() {
             id="phone"
             name="phone"
             label="phone"
-            value={phone}
-            onChange={handlePhone}
+            value={phoneNumber}
+            onChange={handlePhoneNumber}
             fullWidth
             autoComplete="phone"
             variant="standard"

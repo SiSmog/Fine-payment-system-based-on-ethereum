@@ -9,38 +9,56 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import InputAdornment from '@mui/material/InputAdornment';
 
+
+import {useSelector,useDispatch} from "react-redux" 
+import {setLicensePlateType,setLicensePlate,setSpeedLimit,setSpeed} from "../redux/registration"
+
+
+
+const getLicensePlate=(type,value)=>{
+  switch(type){
+    case "TU":
+      return value[0]+" TU "+value[1]
+    case "RS":
+      return "RS "+value[0]
+    case "MOTO":
+      return "MOTO "+value[0]
+  }
+}
 export default function PaymentForm() {
-  const [typeOfCarPlateLicence, setTypeOfCarPlateLicence] = React.useState("");
-  const [tuValue, setTuValue] = React.useState("");
+
+
+
+  const dispatch=useDispatch()
+  const speedLimit=useSelector((state)=>state.registration.speedLimit)
+  const speed=useSelector((state)=>state.registration.speed)
+  const licensePlateType=useSelector((state)=>state.registration.licensePlateType)
+  const licensePlate=useSelector((state)=>state.registration.licensePlate)
+
   const [rsValue, setRsValue] = React.useState("");
   const [motoValue, setMotoValue] = React.useState("");
   // add more state variables for each option
 
-  const handleChange = (event) => {
-    setTypeOfCarPlateLicence(event.target.value);
+  const handleChange = (e) => {
+    dispatch(setLicensePlateType(e.target.value))
   };
 
-  const [limitSpeed, setLimitSpeed] = React.useState("");
-  const handleLimitSpeed = (e) => {
+  const handleSpeedLimit = (e) => {
     const regEX = new RegExp("^[0-9]{0,3}$")
-    console.log(e.target.value);
     if (regEX.test(e.target.value)) {
-      setLimitSpeed(e.target.value);
+      dispatch(setSpeedLimit(e.target.value))
     }
   };
 
-  const [actualSpeed, setActualSpeed] = React.useState("");
-  const handleActualSpeed = (e) => {
+  const handleSpeed = (e) => {
     const regEX = new RegExp("^[0-9]{0,3}$")
-    console.log(e.target.value);
     if (regEX.test(e.target.value)) {
-      setActualSpeed(e.target.value);
+      dispatch(setSpeed(e.target.value))
     }
   };
   const [serieTU, setSerieTU] = React.useState("");
   const handleSerieTU = (e) => {
     const regEX = new RegExp("^[0-9]{0,3}$")
-    console.log(e.target.value);
     if (regEX.test(e.target.value)) {
       setSerieTU(e.target.value);
     }
@@ -48,7 +66,6 @@ export default function PaymentForm() {
   const [numeroTU, setNumeroTU] = React.useState("");
   const handleNumeroTU = (e) => {
     const regEX = new RegExp("^[0-9]{0,4}$")
-    console.log(e.target.value);
     if (regEX.test(e.target.value)) {
       setNumeroTU(e.target.value);
     }
@@ -71,22 +88,22 @@ export default function PaymentForm() {
             <Grid item xs={6}>
                 <TextField
                   label="Limit Speed "
-                  value={limitSpeed}
+                  value={speedLimit}
                   InputProps={{
                     endAdornment: <InputAdornment position="start">Km/H</InputAdornment>,
                   }}
-                  onChange={handleLimitSpeed}
+                  onChange={handleSpeedLimit}
                   fullWidth
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   label="Actual Speed"
-                  value={actualSpeed}
+                  value={speed}
                   InputProps={{
                     endAdornment: <InputAdornment position="start">Km/H</InputAdornment>,
                   }}
-                  onChange={handleActualSpeed}
+                  onChange={handleSpeed}
                   fullWidth
                 />
               </Grid>
@@ -97,7 +114,7 @@ export default function PaymentForm() {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={typeOfCarPlateLicence}
+            value={licensePlateType}
             label="Licence Plate"
             onChange={handleChange}
             fullWidth
@@ -109,7 +126,7 @@ export default function PaymentForm() {
           </Select>
           </Grid>
           <Grid item container spacing={2}>
-          {typeOfCarPlateLicence === "TU" && (
+          {licensePlateType === "TU" && (
             <Grid item container spacing={2}>
               <Grid item xs={6}>
                 <TextField
@@ -132,7 +149,7 @@ export default function PaymentForm() {
             </Grid>
           )}
 
-          {typeOfCarPlateLicence === "RS" && (
+          {licensePlateType === "RS" && (
             <Grid item xs={12}>
               <TextField
                 label="RS value"
@@ -143,7 +160,7 @@ export default function PaymentForm() {
             </Grid>
           )}
 
-          {typeOfCarPlateLicence === "MOTO" && (
+          {licensePlateType === "MOTO" && (
             <Grid item xs={12} >
               <TextField
                 label="MOTO value"
