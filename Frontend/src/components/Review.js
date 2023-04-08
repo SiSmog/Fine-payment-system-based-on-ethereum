@@ -4,7 +4,8 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
-
+import LicensePlate from "./License";
+import { useSelector } from 'react-redux';
 const products = [
   {
     name: 'Product 1',
@@ -38,8 +39,12 @@ const payments = [
 ];
 
 export default function Review() {
+  const licensePlate=useSelector((state)=>state.registration.licensePlate)
+
   return (
     <React.Fragment>
+      <LicensePlate text={licensePlate} />
+      
       <Typography variant="h6" gutterBottom>
         Order summary
       </Typography>

@@ -9,7 +9,7 @@ const registrationSlice= createSlice({
         driverLicense:"",
         email:"",
         phoneNumber:"",
-        licensePlateType:"",
+        licensePlateType:"TU",
         licensePlate:"",
         speedLimit:"",
         speed:""

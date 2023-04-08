@@ -1,10 +1,8 @@
-import Form from "./components/Form"
-
+import Register from "./components/Register"
 function App() {
   return (
     <div>
-      <Form  />
-
+      <Register  />
     </div>
   );
 }

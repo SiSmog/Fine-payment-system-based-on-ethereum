@@ -25,18 +25,17 @@ const getLicensePlate=(type,value)=>{
       return "MOTO "+value[0]
   }
 }
-export default function PaymentForm() {
-
-
-
+export default function VehicleForm() {
   const dispatch=useDispatch()
   const speedLimit=useSelector((state)=>state.registration.speedLimit)
   const speed=useSelector((state)=>state.registration.speed)
   const licensePlateType=useSelector((state)=>state.registration.licensePlateType)
-  const licensePlate=useSelector((state)=>state.registration.licensePlate)
+  const speedLimitError=useSelector((state)=>state.registrationError.speedLimitError)
+  const speedError=useSelector((state)=>state.registrationError.speedError)
+  const licensePlateError=useSelector((state)=>state.registrationError.licensePlateError)
 
-  const [rsValue, setRsValue] = React.useState("");
-  const [motoValue, setMotoValue] = React.useState("");
+  const [numeroRS, setNumeroRS] = React.useState("");
+  const [numeroMOTO, setNumeroMOTO] = React.useState("");
   // add more state variables for each option
 
   const handleChange = (e) => {
@@ -61,6 +60,7 @@ export default function PaymentForm() {
     const regEX = new RegExp("^[0-9]{0,3}$")
     if (regEX.test(e.target.value)) {
       setSerieTU(e.target.value);
+      dispatch(setLicensePlate(getLicensePlate("TU",[e.target.value,numeroTU])))
     }
   };
   const [numeroTU, setNumeroTU] = React.useState("");
@@ -68,8 +68,24 @@ export default function PaymentForm() {
     const regEX = new RegExp("^[0-9]{0,4}$")
     if (regEX.test(e.target.value)) {
       setNumeroTU(e.target.value);
+      dispatch(setLicensePlate(getLicensePlate("TU",[serieTU,e.target.value])))
     }
   };
+  const handleNumeroRS = (e) => {
+    const regEX = new RegExp("^[0-9]{0,6}$")
+    if (regEX.test(e.target.value)) {
+      setNumeroRS(e.target.value);
+      dispatch(setLicensePlate(getLicensePlate("RS",[e.target.value])))
+    }
+  };
+  const handleNumeroMOTO = (e) => {
+    const regEX = new RegExp("^[0-9]{0,5}$")
+    if (regEX.test(e.target.value)) {
+      setNumeroMOTO(e.target.value);
+      dispatch(setLicensePlate(getLicensePlate("MOTO",[e.target.value])))
+    }
+  };
+
 
 
 
@@ -89,6 +105,7 @@ export default function PaymentForm() {
                 <TextField
                   label="Limit Speed "
                   value={speedLimit}
+                  error={speedLimitError}
                   InputProps={{
                     endAdornment: <InputAdornment position="start">Km/H</InputAdornment>,
                   }}
@@ -100,6 +117,7 @@ export default function PaymentForm() {
                 <TextField
                   label="Actual Speed"
                   value={speed}
+                  error={speedError}
                   InputProps={{
                     endAdornment: <InputAdornment position="start">Km/H</InputAdornment>,
                   }}
@@ -132,6 +150,7 @@ export default function PaymentForm() {
                 <TextField
                   label="Serie"
                   value={serieTU}
+                  error={licensePlateError[0]}
                   onChange={handleSerieTU}
                   fullWidth
                 />
@@ -142,6 +161,7 @@ export default function PaymentForm() {
                 <TextField
                   label="N°"
                   value={numeroTU}
+                  error={licensePlateError[1]}
                   onChange={handleNumeroTU}
                   fullWidth
                 />
@@ -153,8 +173,9 @@ export default function PaymentForm() {
             <Grid item xs={12}>
               <TextField
                 label="RS value"
-                value={rsValue}
-                onChange={(event) => setRsValue(event.target.value)}
+                value={numeroRS}
+                error={licensePlateError[2]}
+                onChange={handleNumeroRS}
                 fullWidth
               />
             </Grid>
@@ -164,8 +185,9 @@ export default function PaymentForm() {
             <Grid item xs={12} >
               <TextField
                 label="MOTO value"
-                value={motoValue}
-                onChange={(event) => setMotoValue(event.target.value)}
+                value={numeroMOTO}
+                error={licensePlateError[3]}
+                onChange={handleNumeroMOTO}
                 fullWidth
               />
             </Grid>
@@ -174,12 +196,7 @@ export default function PaymentForm() {
           {/* add more text fields for each option */}
         </Grid>
 
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={<Checkbox color="secondary" name="saveCard" value="yes" />}
-            label="Remember credit card details for next time"
-          />
-        </Grid>
+        
       </Grid>
     </React.Fragment>
   );

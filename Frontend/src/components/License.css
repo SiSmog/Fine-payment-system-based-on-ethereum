@@ -1,0 +1,19 @@
+
+.licensePlate {
+    margin-top: 20px;
+    background-color: #111; 
+    color: #fff;;
+    width: 100%;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 36px;
+    letter-spacing: 10px;
+    border: solid white 4px;
+    outline: 6px solid #111;
+    border-radius: 2px;
+
+
+}
