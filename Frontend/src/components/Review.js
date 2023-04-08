@@ -39,56 +39,59 @@ const payments = [
 ];
 
 export default function Review() {
+  const firstName=useSelector((state)=>state.registration.firstName)
+  const lastName=useSelector((state)=>state.registration.lastName)
+  const id=useSelector((state)=>state.registration.id)
+  const driverLicense=useSelector((state)=>state.registration.driverLicense)
+  const email=useSelector((state)=>state.registration.email)
+  const phoneNumber=useSelector((state)=>state.registration.phoneNumber)
+
+
   const licensePlate=useSelector((state)=>state.registration.licensePlate)
 
   return (
     <React.Fragment>
-      <LicensePlate text={licensePlate} />
-      
-      <Typography variant="h6" gutterBottom>
-        Order summary
-      </Typography>
       <List disablePadding>
-        {products.map((product) => (
-          <ListItem key={product.name} sx={{ py: 1, px: 0 }}>
-            <ListItemText primary={product.name} secondary={product.desc} />
-            <Typography variant="body2">{product.price}</Typography>
-          </ListItem>
-        ))}
-
         <ListItem sx={{ py: 1, px: 0 }}>
-          <ListItemText primary="Total" />
-          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            $34.06
+          <ListItemText primary="First name" />
+          <Typography sx={{ fontWeight: 700 }}>
+          {firstName}
+          </Typography>
+        </ListItem>
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Last name" />
+          <Typography sx={{ fontWeight: 700 }}>
+          {lastName}
+          </Typography>
+        </ListItem>
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="ID" />
+          <Typography sx={{ fontWeight: 700 }}>
+          {id}
+          </Typography>
+        </ListItem>
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Driver license" />
+          <Typography sx={{ fontWeight: 700 }}>
+          {driverLicense}
+          </Typography>
+        </ListItem>
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Email" />
+          <Typography sx={{ fontWeight: 700 }}>
+          {email}
+          </Typography>
+        </ListItem>
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Phone number" />
+          <Typography sx={{ fontWeight: 700 }}>
+          {phoneNumber}
           </Typography>
         </ListItem>
       </List>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-            Shipping
-          </Typography>
-          <Typography gutterBottom>John Smith</Typography>
-          <Typography gutterBottom>{addresses.join(', ')}</Typography>
-        </Grid>
-        <Grid item container direction="column" xs={12} sm={6}>
-          <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-            Payment details
-          </Typography>
-          <Grid container>
-            {payments.map((payment) => (
-              <React.Fragment key={payment.name}>
-                <Grid item xs={6}>
-                  <Typography gutterBottom>{payment.name}</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography gutterBottom>{payment.detail}</Typography>
-                </Grid>
-              </React.Fragment>
-            ))}
-          </Grid>
-        </Grid>
-      </Grid>
+      <LicensePlate text={licensePlate} />
+
+      
     </React.Fragment>
   );
 }

@@ -18,6 +18,9 @@ import Review from './Review';
 import {useSelector,useDispatch} from "react-redux" 
 import {setFirstNameError,setLastNameError,setIdError,setDriverLicenseError,setEmailError,setPhoneNumberError,setLicensePlateError,setSpeedLimitError,setSpeedError} from "../redux/registrationError"
 import Toast from './Toast';
+import LoadingButton from '@mui/lab/LoadingButton';
+import CircularProgress from '@mui/material/CircularProgress';
+
 function getStepContent(step) {
   switch (step) {
     case 0:
@@ -36,11 +39,42 @@ const steps = ['Driver information', 'Vehicle information', 'Ticket confirmation
 const theme = createTheme();
 
 export default function Register() {
-
+  
   const [activeStep, setActiveStep] = React.useState(0);
+  const [disabled, setDisabled] = React.useState(false);
+  const [progress, setProgress] = React.useState(0);
   const {firstName,lastName,id,driverLicense,email,phoneNumber,licensePlateType,licensePlate,speedLimit,speed}=useSelector((state)=>state.registration)
   const [toasts, setToasts] = React.useState([])
-  console.log(useSelector((state)=>state.registrationError))
+  
+  React.useEffect(() => {
+    if(activeStep==2){
+    setDisabled(true)
+  }else{
+    setDisabled(false)
+  }
+  }, [activeStep]);
+  React.useEffect(() => {
+    if(disabled){
+      const timer = setInterval(() => { 
+          setProgress((prevProgress) =>{
+            if (prevProgress==100){
+              setDisabled(false)
+              return 0
+            }else{
+              return prevProgress+5
+            }
+          });
+        
+      }, 250);
+  
+      return () => {
+        clearInterval(timer);
+      };
+    }else{
+      setProgress(0);
+    }
+    
+  }, [disabled]);
   const dispatch=useDispatch()
   const verifyDriverForm=()=>{
     var verified=true
@@ -157,6 +191,9 @@ export default function Register() {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
+  const loadingIndicator=()=>{
+    return <><CircularProgress color="inherit" variant='determinate' size={16} value={progress} /></>
+  }
 
   return (
     <>
@@ -195,13 +232,16 @@ export default function Register() {
                   </Button>
                 )}
 
-                <Button
+                <LoadingButton
                   variant="contained"
+                  disabled={disabled}
+                  loading={disabled}
+                  loadingIndicator={loadingIndicator()}
                   onClick={handleNext}
-                  sx={{ mt: 3, ml: 1 }}
+                  sx={{ mt: 3, ml: 1,px:2 }}
                 >
-                  {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
-                </Button>
+                  {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
+                </LoadingButton>
               </Box>
             </React.Fragment>
           )}
