@@ -38,7 +38,7 @@ const payments = [
   { name: 'Expiry date', detail: '04/2024' },
 ];
 
-export default function Review() {
+export default function Confirm() {
   const firstName=useSelector((state)=>state.registration.firstName)
   const lastName=useSelector((state)=>state.registration.lastName)
   const id=useSelector((state)=>state.registration.id)

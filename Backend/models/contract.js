@@ -1,10 +1,6 @@
 import contractABI from "./contractABI.js"
-import dotenv from 'dotenv';
 import ethers from 'ethers';
-
-dotenv.config();
-
-const alchemyProvider = new ethers.providers.AlchemyProvider("goerli", process.env.API_KEY);
+import alchemyProvider from "./provider.js";
 
 const signer = new ethers.Wallet(process.env.PRIVATE_KEY, alchemyProvider);
 
