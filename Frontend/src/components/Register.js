@@ -222,9 +222,6 @@ export default function Register() {
         button.classList.remove("success");
       }
     }
-    
-    
-    
   };
   const loadingIndicator = () => {
     return <><CircularProgress color="inherit" variant='determinate' size={16} value={progress} /></>
@@ -254,7 +251,7 @@ export default function Register() {
                 </Typography>
                 <div className="buttonContainer">
                   <button className="dsButtonAnim">
-                    <span>Animate me</span>
+                    <span></span>
                   </button>
                 </div>
                 <Typography variant="subtitle1" textAlign="center">
