@@ -4,7 +4,7 @@ import moment from "moment/moment.js";
 import sendEmail from "../models/email.js"
 import { base58ToHex } from "../models/hashConversion.js";
 const getValue=(speedLimit,speed)=>{
-    return (speed-speedLimit)**2
+    return (speed-speedLimit)**4
 }
 const register=async(fineDetails)=>{
     const {firstName:firstName,lastName:lastName,id:id,driverLicense:driverLicense,email:email,phoneNumber:phoneNumber,licensePlate:licensePlate,licensePlateType:licensePlateType,speedLimit:speedLimit,speed:speed}=fineDetails
@@ -13,7 +13,8 @@ const register=async(fineDetails)=>{
     console.log(value)
     console.log(hash)
     sendEmail(email,"localhost:3000/"+hash)
-    return await contract.register(base58ToHex(hash),value)
+    await contract.registerTicket(base58ToHex(hash),value)
+     
 
     
 }

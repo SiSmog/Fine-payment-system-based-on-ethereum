@@ -1,5 +1,5 @@
-2023/04/12-12:49:35.331 627c Recovering log #178
-2023/04/12-12:49:35.332 627c Level-0 table #180: started
-2023/04/12-12:49:35.337 627c Level-0 table #180: 1656 bytes OK
-2023/04/12-12:49:35.350 627c Delete type=0 #178
-2023/04/12-12:49:35.354 627c Delete type=3 #176
+2023/04/16-02:38:11.115 2ba8 Recovering log #360
+2023/04/16-02:38:11.115 2ba8 Level-0 table #362: started
+2023/04/16-02:38:11.120 2ba8 Level-0 table #362: 273 bytes OK
+2023/04/16-02:38:11.131 2ba8 Delete type=0 #360
+2023/04/16-02:38:11.133 2ba8 Delete type=3 #358
