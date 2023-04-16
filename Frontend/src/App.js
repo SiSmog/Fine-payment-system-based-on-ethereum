@@ -1,4 +1,4 @@
-import Register from "./components/Register"
+import RegisterTicket from "./components/RegisterTicket"
 import Payment from "./components/Payment";
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 function App() {
@@ -6,7 +6,7 @@ function App() {
     <>
      <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Register/>}/>
+          <Route path="/" element={<RegisterTicket/>}/>
           <Route path="/:hash" element={<Payment/>}/>
         </Routes>
       </BrowserRouter>

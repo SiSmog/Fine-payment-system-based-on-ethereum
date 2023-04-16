@@ -1,5 +1,5 @@
 const CONTRACT={
-    "address":"0x5DEcF07771ad923eC461B4a736f39634FCE3F0b0",//put address after deployment
+    "address":"0x17FF8f500D881B2e0200f4F2D4748b89E6272e01",//put address after deployment
     "ABI":[
         {
             "inputs": [],
@@ -11,9 +11,9 @@ const CONTRACT={
             "inputs": [
                 {
                     "indexed": false,
-                    "internalType": "string",
+                    "internalType": "bytes",
                     "name": "hash",
-                    "type": "string"
+                    "type": "bytes"
                 }
             ],
             "name": "paid",
@@ -22,9 +22,9 @@ const CONTRACT={
         {
             "inputs": [
                 {
-                    "internalType": "string",
+                    "internalType": "bytes",
                     "name": "key",
-                    "type": "string"
+                    "type": "bytes"
                 }
             ],
             "name": "pay",
@@ -33,31 +33,13 @@ const CONTRACT={
             "type": "function"
         },
         {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "key",
-                    "type": "string"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "value",
-                    "type": "uint256"
-                }
-            ],
-            "name": "register",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
             "anonymous": false,
             "inputs": [
                 {
                     "indexed": false,
-                    "internalType": "string",
+                    "internalType": "bytes",
                     "name": "hash",
-                    "type": "string"
+                    "type": "bytes"
                 },
                 {
                     "indexed": false,
@@ -72,12 +54,30 @@ const CONTRACT={
         {
             "inputs": [
                 {
-                    "internalType": "string",
+                    "internalType": "bytes",
                     "name": "key",
-                    "type": "string"
+                    "type": "bytes"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "value",
+                    "type": "uint256"
                 }
             ],
-            "name": "getRegistrationValue",
+            "name": "registerTicket",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "bytes",
+                    "name": "key",
+                    "type": "bytes"
+                }
+            ],
+            "name": "getTicketValue",
             "outputs": [
                 {
                     "internalType": "uint256",
@@ -91,12 +91,31 @@ const CONTRACT={
         {
             "inputs": [
                 {
-                    "internalType": "string",
-                    "name": "",
-                    "type": "string"
+                    "internalType": "bytes[]",
+                    "name": "keys",
+                    "type": "bytes[]"
                 }
             ],
-            "name": "registrations",
+            "name": "getTicketValues",
+            "outputs": [
+                {
+                    "internalType": "uint256[]",
+                    "name": "",
+                    "type": "uint256[]"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "bytes",
+                    "name": "",
+                    "type": "bytes"
+                }
+            ],
+            "name": "tickets",
             "outputs": [
                 {
                     "internalType": "uint256",

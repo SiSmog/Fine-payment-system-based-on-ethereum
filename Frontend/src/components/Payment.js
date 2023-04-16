@@ -9,139 +9,201 @@ import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useSelector, } from "react-redux"
 import Toast from './Toast';
 import "./Loading.css";
-import LoadingButton from '@mui/lab/LoadingButton';
 import getContract from '../services/contract';
 import { useParams } from 'react-router-dom';
 import { ethers } from 'ethers';
 import MetaMaskOnboarding from "@metamask/onboarding";
+import base58ToHex from '../hashConversion';
+import getTicketData from '../services/getTicketData';
+import MetaMaskPopup from './MetaMaskPopup';
+import CustomButton from './CustomButton';
+import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 const theme = createTheme();
 
 export default function Payment() {
 
-    const { firstName, lastName, id, driverLicense, email, phoneNumber, licensePlateType, licensePlate, speedLimit, speed } = useSelector((state) => state.registration)
-    const { hash } = useParams()
+
     const [data, setData] = React.useState({})
     const [logged, setLogged] = React.useState(false)
+    const [popup, setPopup] = React.useState(false)
     const [contract, setContract] = React.useState(null)
     const [value, setValue] = React.useState(0)
+    const [loaded, setLoaded] = React.useState(false);
     const [pending, setPending] = React.useState(false);
+    const [paid, setPaid] = React.useState(false);
 
-    const fetchValue = async () => {
-        setValue(await contract.getRegistrationValue(hash))
+
+    const { hash } = useParams()
+    const hexHash = base58ToHex(hash)
+    const cancelPopup = () => {
+        setPopup(false)
     }
-    const pay=async()=>{
-        setPending(true)
-        await contract.pay(hash,{value:value}).then((res)=>{
-            console.log(res)
+    const paidEventListener = (hash) => {
+        if (hash == hexHash) {
             setPending(false)
+            setPaid(true)
+            setValue(0)
+            contract.off('paid', paidEventListener)
         }
-        )
+
+    }
+    const pay = async () => {
+        if (logged) {
+            if (!paid) {
+                await contract.pay(hexHash, { value: value }).then(() => setPending(true))
+                contract.on('paid', paidEventListener)
+            }
+        } else {
+            setPopup(true)
+        }
+
+
+    }
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        const formattedDate = `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+        return formattedDate
+    }
+    const formatTime = (dateString) => {
+        const date = new Date(dateString);
+
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+        return formattedTime
     }
     React.useEffect(() => {
-        if(logged){
-            fetchValue()
-        }
-    }, [logged,pending])
-    React.useEffect(()=>{
+        getTicketData(hash).then((res) => {
+            setData(res.data.ticket)
+            setValue(res.data.value)
+            setLoaded(true)
+            if (res.data.value == 0) {
+                setPaid(true)
+            }
+            if (window.ethereum && window.ethereum.isMetaMask && window.ethereum.selectedAddress) {
+                setLogged(true)
+                setContract(getContract())
+            }
+        })
+    }, [])
+    React.useEffect(() => {
         handleLoading()
-      },[pending,])
+    }, [pending,])
     const handleLoading = () => {
         const button = document.querySelector(".dsButtonAnim");
-        if(pending){
-          button.classList.add("loading");
-        }else{
-          button.classList.remove("loading");
-        }
-      };
-      const forwarderOrigin = "http://localhost:3000";
-      const onboarding = new MetaMaskOnboarding({ forwarderOrigin });
-      const handleLogin = () => {
-        if (window.ethereum && window.ethereum.isMetaMask) {
-          console.log("MetaMask Here!");
-          window.ethereum
-            .request({ method: "eth_requestAccounts" })
-            .then((result) => {
-              console.log(result);
-              setLogged(true);
-              setContract(getContract())
-            })
-            .catch((error) => {
-              console.log("Could not detect Account");
-            });
+        if (pending) {
+            button.classList.add("loading");
         } else {
-          console.log("Need to install MetaMask");
-          onboarding.startOnboarding();
+            button.classList.remove("loading");
         }
-      };
+    };
+    const forwarderOrigin = "http://localhost:3000";
+    const onboarding = new MetaMaskOnboarding({ forwarderOrigin });
+    const handleLogin = () => {
+        if (window.ethereum && window.ethereum.isMetaMask) {
+            console.log("MetaMask Here!");
+            window.ethereum
+                .request({ method: "eth_requestAccounts" })
+                .then((result) => {
+                    console.log(result);
+                    setLogged(true);
+                    setContract(getContract())
+                    if (popup) { setPopup(false) }
+                })
+                .catch((error) => {
+                    console.log("Could not detect Account");
+                });
+        } else {
+            console.log("Need to install MetaMask");
+            onboarding.startOnboarding();
+        }
+    };
+    const Buttons = () => {
+        return (<>
+            <CustomButton variant='secondary large' text="Cancel" onClick={() => cancelPopup()} />
+
+            <CustomButton variant='primary large' text="Connect" onClick={handleLogin} />
+
+        </>)
+
+
+    }
 
     const [toasts, setToasts] = React.useState([])
     return (
         <>
+            <MetaMaskPopup activate={Buttons()} className={popup ? "alertContainer" : "displaynone"} icon="/MetaMask_Fox.svg.png" />
             <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
                     <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-                        <Typography component="h1" variant="h4" align="center">
+                        <Typography sx={{ mb: 5 }} component="h1" variant="h4" align="center">
                             Ticket
                         </Typography>
                         <React.Fragment>
                             <List disablePadding>
+                               
                                 <ListItem sx={{ py: 1, px: 0 }}>
                                     <ListItemText primary="Metamask" />
-                                    <Button onClick={handleLogin}>
-                                        Connect
-                                    </Button>
+                                    <button className={logged ? "dsButtonAnim small success" : "dsButtonAnim small"} onClick={() => handleLogin()}>
+                                        <span>Connect</span>
+                                    </button>
+                                </ListItem>
+                                
+                                <ListItem sx={{ py: 1, px: 0 }}>
+                                    <ListItemText primary="Date" />
+                                    <Typography sx={{ fontWeight: 700 }}>
+                                        {formatDate(data.time)}
+                                    </Typography>
                                 </ListItem>
                                 <ListItem sx={{ py: 1, px: 0 }}>
-                                    <ListItemText primary="Value" />
+                                    <ListItemText primary="Time" />
                                     <Typography sx={{ fontWeight: 700 }}>
-                                        {ethers.utils.formatEther(value.toString())} ETH
+                                        {formatTime(data.time)}
                                     </Typography>
                                 </ListItem>
                                 <ListItem sx={{ py: 1, px: 0 }}>
                                     <ListItemText primary="First name" />
                                     <Typography sx={{ fontWeight: 700 }}>
-                                        {firstName}
+                                        {data.firstName}
                                     </Typography>
                                 </ListItem>
                                 <ListItem sx={{ py: 1, px: 0 }}>
                                     <ListItemText primary="Last name" />
                                     <Typography sx={{ fontWeight: 700 }}>
-                                        {lastName}
+                                        {data.lastName}
                                     </Typography>
                                 </ListItem>
                                 <ListItem sx={{ py: 1, px: 0 }}>
                                     <ListItemText primary="ID" />
                                     <Typography sx={{ fontWeight: 700 }}>
-                                        {id}
+                                        {data.id}
                                     </Typography>
                                 </ListItem>
                                 <ListItem sx={{ py: 1, px: 0 }}>
                                     <ListItemText primary="Driver license" />
                                     <Typography sx={{ fontWeight: 700 }}>
-                                        {driverLicense}
+                                        {data.driverLicense}
                                     </Typography>
                                 </ListItem>
                                 <ListItem sx={{ py: 1, px: 0 }}>
-                                    <ListItemText primary="Email" />
+                                    <ListItemText primary="Value" />
                                     <Typography sx={{ fontWeight: 700 }}>
-                                        {email}
+                                        {loaded ? ethers.utils.formatEther(value.toString()) + " ETH" : ""}
                                     </Typography>
                                 </ListItem>
-                                <ListItem sx={{ py: 1, px: 0 }}>
-                                    <ListItemText primary="Phone number" />
-                                    <Typography sx={{ fontWeight: 700 }}>
-                                        {phoneNumber}
-                                    </Typography>
-                                </ListItem>
+                                
                             </List>
                             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
 
                                 <div className="buttonContainer">
-                                    <button className="dsButtonAnim" onClick={()=>pay()}>
+                                    <button className={paid ? "dsButtonAnim success " : "dsButtonAnim " + (pending ? "loading" : "")} onClick={() => pay()}>
                                         <span>Submit</span>
                                     </button>
                                 </div>

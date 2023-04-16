@@ -1,6 +1,6 @@
 import api from "./api";
 
-const getTicketData=async(ticket)=>{
-    return await api.post("/",ticket)
+const getTicketData=async(hash)=>{
+    return await api.get("/"+hash)
 }
 export default getTicketData

@@ -36,7 +36,7 @@ const steps = ['Driver information', 'Vehicle information', 'Ticket confirmation
 
 const theme = createTheme();
 
-export default function Register() {
+export default function RegisterTicket() {
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [disabled, setDisabled] = React.useState(false);
@@ -201,7 +201,7 @@ export default function Register() {
     setActiveStep(activeStep + 1)
     setPending(true)
     register(ticket).then((res) => {
-      setStatus(res.data.mined)
+      setStatus(res.data.registered)
       setPending(false)
     })
   }

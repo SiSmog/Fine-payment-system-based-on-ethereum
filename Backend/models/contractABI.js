@@ -1,5 +1,5 @@
 const CONTRACT={
-    "address":"0x13660A99d1E39AF1413A70e2e82794Dc1292450E",//put address after deployment
+    "address":"0x17FF8f500D881B2e0200f4F2D4748b89E6272e01",//put address after deployment
     "ABI":[
         {
             "inputs": [],
@@ -83,6 +83,25 @@ const CONTRACT={
                     "internalType": "uint256",
                     "name": "",
                     "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "bytes[]",
+                    "name": "keys",
+                    "type": "bytes[]"
+                }
+            ],
+            "name": "getTicketValues",
+            "outputs": [
+                {
+                    "internalType": "uint256[]",
+                    "name": "",
+                    "type": "uint256[]"
                 }
             ],
             "stateMutability": "view",
