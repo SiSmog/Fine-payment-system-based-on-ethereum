@@ -11,18 +11,20 @@ router.get('/:hash',(req,res)=>{
         res.send({ticket:result[0].payload.value,value:result[1].toNumber()})
     })
 })
-router.get('/ticket/id',async(req,res)=>{
-    await getTicketById(req.body.id).then((result)=>{
+router.get('/ticket/id/:id',(req,res)=>{
+    getTicketById(req.params.id).then((result)=>{
         res.send(result)
     })
 })
-router.get('/ticket/driverlicense',async(req,res)=>{
-    await getTicketByDriverLicense(req.body.driverLicense).then((result)=>{
+router.get('/ticket/driverlicense/:driverlicense',async(req,res)=>{
+    const params = new URLSearchParams(req.params.driverlicense);
+    await getTicketByDriverLicense(params.get("driverLicense")).then((result)=>{
         res.send(result)
     })
 })
-router.get('/ticket/licenseplate',async(req,res)=>{
-    await getTicketByLicensePlate(req.body.licensePlate).then((result)=>{
+router.get('/ticket/licenseplate/:licenseplate',async(req,res)=>{
+    const params = new URLSearchParams(req.params.licenseplate);
+    await getTicketByLicensePlate(params.get("licensePlate")).then((result)=>{
         res.send(result)
     })
 })

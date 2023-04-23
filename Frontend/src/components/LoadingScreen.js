@@ -1,7 +1,7 @@
-import { autocompleteClasses, Box, Container, Grid, Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import * as React from "react";
-export default function SearchFine() {
+export default function LoadingScreen() {
   return (
     <React.Fragment>
       <Box
@@ -20,7 +20,7 @@ export default function SearchFine() {
         }}
       >
 
-          <Paper sx={{ p: 10, width:50,height:50,margin:"auto"}}>
+          <Paper sx={{ p: 8, width:40,height:40,margin:"auto"}}>
             <Box
               sx={{
                 justifyContent: "center",
@@ -28,7 +28,7 @@ export default function SearchFine() {
                 width: "fitContent"
               }}
             >
-              <CircularProgress size={50} />
+              <CircularProgress size={40}  />
             </Box>
           </Paper>
       </Box>

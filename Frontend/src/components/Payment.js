@@ -9,8 +9,7 @@ import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Toast from './Toast';
-import "./Loading.css";
+import "./dsButton.css";
 import getContract from '../services/contract';
 import { useParams } from 'react-router-dom';
 import { ethers } from 'ethers';
@@ -19,7 +18,7 @@ import base58ToHex from '../hashConversion';
 import getTicketData from '../services/getTicketData';
 import MetaMaskPopup from './MetaMaskPopup';
 import CustomButton from './CustomButton';
-import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
+import LoadingScreen from './LoadingScreen';
 const theme = createTheme();
 
 export default function Payment() {
@@ -96,12 +95,15 @@ export default function Payment() {
         handleLoading()
     }, [pending,])
     const handleLoading = () => {
-        const button = document.querySelector(".dsButtonAnim");
-        if (pending) {
-            button.classList.add("loading");
-        } else {
-            button.classList.remove("loading");
-        }
+        try{
+            const button = document.querySelector(".dsButtonAnim");
+            if (pending) {
+                button.classList.add("loading");
+            } else {
+                button.classList.remove("loading");
+            }
+        }catch(e){}
+        
     };
     const forwarderOrigin = "http://localhost:3000";
     const onboarding = new MetaMaskOnboarding({ forwarderOrigin });
@@ -134,88 +136,102 @@ export default function Payment() {
 
 
     }
-
-    const [toasts, setToasts] = React.useState([])
-    return (
-        <>
-            <MetaMaskPopup activate={Buttons()} className={popup ? "alertContainer" : "displaynone"} icon="/MetaMask_Fox.svg.png" />
-            <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-                    <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-                        <Typography sx={{ mb: 5 }} component="h1" variant="h4" align="center">
-                            Ticket
-                        </Typography>
-                        <React.Fragment>
-                            <List disablePadding>
-                               
-                                <ListItem sx={{ py: 1, px: 0 }}>
-                                    <ListItemText primary="Metamask" />
-                                    <button className={logged ? "dsButtonAnim small success" : "dsButtonAnim small"} onClick={() => handleLogin()}>
-                                        <span>Connect</span>
-                                    </button>
-                                </ListItem>
-                                
-                                <ListItem sx={{ py: 1, px: 0 }}>
-                                    <ListItemText primary="Date" />
-                                    <Typography sx={{ fontWeight: 700 }}>
-                                        {formatDate(data.time)}
-                                    </Typography>
-                                </ListItem>
-                                <ListItem sx={{ py: 1, px: 0 }}>
-                                    <ListItemText primary="Time" />
-                                    <Typography sx={{ fontWeight: 700 }}>
-                                        {formatTime(data.time)}
-                                    </Typography>
-                                </ListItem>
-                                <ListItem sx={{ py: 1, px: 0 }}>
-                                    <ListItemText primary="First name" />
-                                    <Typography sx={{ fontWeight: 700 }}>
-                                        {data.firstName}
-                                    </Typography>
-                                </ListItem>
-                                <ListItem sx={{ py: 1, px: 0 }}>
-                                    <ListItemText primary="Last name" />
-                                    <Typography sx={{ fontWeight: 700 }}>
-                                        {data.lastName}
-                                    </Typography>
-                                </ListItem>
-                                <ListItem sx={{ py: 1, px: 0 }}>
-                                    <ListItemText primary="ID" />
-                                    <Typography sx={{ fontWeight: 700 }}>
-                                        {data.id}
-                                    </Typography>
-                                </ListItem>
-                                <ListItem sx={{ py: 1, px: 0 }}>
-                                    <ListItemText primary="Driver license" />
-                                    <Typography sx={{ fontWeight: 700 }}>
-                                        {data.driverLicense}
-                                    </Typography>
-                                </ListItem>
-                                <ListItem sx={{ py: 1, px: 0 }}>
-                                    <ListItemText primary="Value" />
-                                    <Typography sx={{ fontWeight: 700 }}>
-                                        {loaded ? ethers.utils.formatEther(value.toString()) + " ETH" : ""}
-                                    </Typography>
-                                </ListItem>
-                                
-                            </List>
-                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-
-                                <div className="buttonContainer">
-                                    <button className={paid ? "dsButtonAnim success " : "dsButtonAnim " + (pending ? "loading" : "")} onClick={() => pay()}>
-                                        <span>Submit</span>
-                                    </button>
-                                </div>
-                            </Box>
-                        </React.Fragment>
-
-                    </Paper>
-                </Container>
-            </ThemeProvider>
-            {toasts.map((res) => {
-                return <Toast key={res} text={res[0]} variant={res[1] ? "successToast" : "dangerToast"} />
-            })}
-        </>
-    );
+    if(!loaded){
+        return(<LoadingScreen/>)
+    }else{
+        return (
+            <Box
+            component="main"
+            sx={{
+              backgroundColor: (theme) =>
+                theme.palette.mode === "light"
+                  ? theme.palette.grey[100]
+                  : theme.palette.grey[900],
+              flexGrow: 1,
+              height: "100vh",
+              overflow: "auto",
+              display: "flex",
+              justifyContent: "center",
+              position: "relative",
+            }}
+          >
+                <MetaMaskPopup activate={Buttons()} className={popup ? "alertContainer" : "displaynone"} icon="/MetaMask_Fox.svg.png" />
+                <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <Container maxWidth="sm" sx={{ mb: 4 }}>
+                        <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                            <Typography sx={{ mb: 5 }} component="h1" variant="h4" align="center">
+                                Ticket
+                            </Typography>
+                            <React.Fragment>
+                                <List disablePadding>
+                                   
+                                    <ListItem sx={{ py: 1, px: 0 }}>
+                                        <ListItemText primary="Metamask" />
+                                        <button className={logged ? "dsButtonAnim small success" : "dsButtonAnim small"} onClick={() => handleLogin()}>
+                                            <span>Connect</span>
+                                        </button>
+                                    </ListItem>
+                                    
+                                    <ListItem sx={{ py: 1, px: 0 }}>
+                                        <ListItemText primary="Date" />
+                                        <Typography sx={{ fontWeight: 700 }}>
+                                            {formatDate(data.time)}
+                                        </Typography>
+                                    </ListItem>
+                                    <ListItem sx={{ py: 1, px: 0 }}>
+                                        <ListItemText primary="Time" />
+                                        <Typography sx={{ fontWeight: 700 }}>
+                                            {formatTime(data.time)}
+                                        </Typography>
+                                    </ListItem>
+                                    <ListItem sx={{ py: 1, px: 0 }}>
+                                        <ListItemText primary="First name" />
+                                        <Typography sx={{ fontWeight: 700 }}>
+                                            {data.firstName}
+                                        </Typography>
+                                    </ListItem>
+                                    <ListItem sx={{ py: 1, px: 0 }}>
+                                        <ListItemText primary="Last name" />
+                                        <Typography sx={{ fontWeight: 700 }}>
+                                            {data.lastName}
+                                        </Typography>
+                                    </ListItem>
+                                    <ListItem sx={{ py: 1, px: 0 }}>
+                                        <ListItemText primary="ID" />
+                                        <Typography sx={{ fontWeight: 700 }}>
+                                            {data.id}
+                                        </Typography>
+                                    </ListItem>
+                                    <ListItem sx={{ py: 1, px: 0 }}>
+                                        <ListItemText primary="Driver license" />
+                                        <Typography sx={{ fontWeight: 700 }}>
+                                            {data.driverLicense}
+                                        </Typography>
+                                    </ListItem>
+                                    <ListItem sx={{ py: 1, px: 0 }}>
+                                        <ListItemText primary="Value" />
+                                        <Typography sx={{ fontWeight: 700 }}>
+                                            {loaded ? ethers.utils.formatEther(value.toString()) + " ETH" : ""}
+                                        </Typography>
+                                    </ListItem>
+                                    
+                                </List>
+                                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+    
+                                    <div className="buttonContainer">
+                                        <button className={paid ? "dsButtonAnim success " : "dsButtonAnim " + (pending ? "loading" : "")} onClick={() => pay()}>
+                                            <span>Submit</span>
+                                        </button>
+                                    </div>
+                                </Box>
+                            </React.Fragment>
+    
+                        </Paper>
+                    </Container>
+                </ThemeProvider>
+            </Box>
+        );
+    }
+    
 }

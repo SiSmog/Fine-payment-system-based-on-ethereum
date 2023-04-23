@@ -15,7 +15,7 @@ import Confirm from './Confirm';
 import { useSelector, useDispatch } from "react-redux"
 import { setFirstNameError, setLastNameError, setIdError, setDriverLicenseError, setEmailError, setPhoneNumberError, setLicensePlateError, setSpeedLimitError, setSpeedError } from "../redux/registrationError"
 import Toast from './Toast';
-import "./Loading.css"
+import "./dsButton.css"
 import LoadingButton from '@mui/lab/LoadingButton';
 import CircularProgress from '@mui/material/CircularProgress';
 import register from '../services/registerService';

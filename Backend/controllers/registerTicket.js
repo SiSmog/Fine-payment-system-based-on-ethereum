@@ -12,7 +12,7 @@ const register=async(fineDetails,res)=>{
     const hexHash=base58ToHex(hash)
     console.log(hexHash)
     const value= getValue(speedLimit,speed)
-    sendEmail(email,"localhost:3000/"+hash)
+    sendEmail(email,"localhost:3000/ticket/"+hash)
     await contract.registerTicket(hexHash,value)
 
     const sendResult=(hash,value)=>{
