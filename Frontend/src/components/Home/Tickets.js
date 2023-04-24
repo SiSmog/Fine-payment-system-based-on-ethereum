@@ -1,5 +1,7 @@
 import * as React from 'react';
 import PaymentsIcon from '@mui/icons-material/Payments';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -30,9 +32,9 @@ export default function Tickets() {
     return (
       <Grid item xs={12}>
         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-          <Typography component="h2" variant="h6" color="primary" gutterBottom>
+          <Typography component="h2" variant="h5"  sx={{ textAlign: "center",py:2}} gutterBottom>
 
-            List Fine
+            Search Results
           </Typography>
           <Table size="small">
             <TableHead>
@@ -50,8 +52,11 @@ export default function Tickets() {
                   <TableCell>{row.data.firstName+" "+row.data.lastName}</TableCell>
 
                   <TableCell>{row.data.licensePlate}</TableCell>
+                  {row.value!=0?
                   <TableCell align="right"><Link to={"http://localhost:3000/ticket/"+row.hash}><PaymentsIcon></PaymentsIcon></Link></TableCell>
-
+                  :<TableCell align="right"><CheckCircleIcon color='success'></CheckCircleIcon></TableCell>
+                }
+                  
 
                 </TableRow>
               ))}

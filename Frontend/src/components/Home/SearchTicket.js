@@ -151,7 +151,7 @@ export default function SearchTicket() {
   }
   return (
     <React.Fragment>
-      <Typography component="h2" variant="h4" color="primary" sx={{ textAlign: "center",py:2}} gutterBottom>
+      <Typography component="h2" variant="h4" sx={{ textAlign: "center",py:2}} gutterBottom>
         Search ticket history
       </Typography>
 
