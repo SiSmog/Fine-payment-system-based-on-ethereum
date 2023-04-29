@@ -7,7 +7,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import "./dsButton.css";
 import getContract from '../services/contract';
@@ -19,6 +18,9 @@ import getTicketData from '../services/getTicketData';
 import MetaMaskPopup from './MetaMaskPopup';
 import CustomButton from './CustomButton';
 import LoadingScreen from './LoadingScreen';
+import IconButton from '@mui/material/IconButton';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Link } from 'react-router-dom';
 const theme = createTheme();
 
 export default function Payment() {
@@ -160,6 +162,11 @@ export default function Payment() {
                     <CssBaseline />
                     <Container maxWidth="sm" sx={{ mb: 4 }}>
                         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                            <Link to="/">
+                                <IconButton color='primary'>
+                                    <ArrowBackIcon />
+                                </IconButton>
+                            </Link>
                             <Typography sx={{ mb: 5 }} component="h1" variant="h4" align="center">
                                 Ticket
                             </Typography>
@@ -221,7 +228,7 @@ export default function Payment() {
     
                                     <div className="buttonContainer">
                                         <button className={paid ? "dsButtonAnim success " : "dsButtonAnim " + (pending ? "loading" : "")} onClick={() => pay()}>
-                                            <span>Submit</span>
+                                            <span>Pay</span>
                                         </button>
                                     </div>
                                 </Box>
