@@ -1,5 +1,3 @@
-// SPDX-License-Identifier: GPL-3.0
-import "hardhat/console.sol";
 pragma solidity ^0.8.0;
 
 contract PFA {
@@ -11,8 +9,7 @@ contract PFA {
     event paid(bytes hash);
 
     constructor() {
-        console.log("Owner contract deployed by:", msg.sender);
-        owner = payable(msg.sender); // 'msg.sender' is sender of current call, contract deployer for a constructor
+        owner = payable(msg.sender); 
     }
 
     function registerTicket(bytes memory key, uint256 value) public {
@@ -24,7 +21,7 @@ contract PFA {
     function pay(bytes memory key) public payable {
         require(msg.value > 0, "No ether sent");
         require(tickets[key]>0, "No fine");
-        require(msg.value >= tickets[key], "No enough ether "); //7ata na3erfou kifeh transfer mich ikoun mil lien  donc 5tarna inou ikoun == mich >=
+        require(msg.value >= tickets[key], "No enough ether "); 
         if(msg.value > tickets[key]){
             uint256 rest = 0;
             rest = msg.value - tickets[key];
@@ -36,8 +33,15 @@ contract PFA {
     }
 
     function getTicketValue(bytes memory key) public view returns (uint256)
-    {
-        uint256 value=tickets[key];
-        return value;
+    {   
+        return tickets[key];
     }
+    function getTicketValues(bytes[] memory keys) public view returns (uint256[] memory) {
+    uint256[] memory result = new uint256[](keys.length);
+    for (uint256 i = 0; i < keys.length; i++) {
+        result[i] = tickets[keys[i]];
+    }
+    return result;
+}
+
 }
